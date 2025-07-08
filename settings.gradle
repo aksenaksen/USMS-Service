@@ -1,5 +1,6 @@
-rootProject.name = 'multi-module'
+rootProject.name = 'usms'
 
 
 include 'service'
 include 'common:snowflake'
+include 'service:member'

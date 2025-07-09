@@ -17,6 +17,8 @@ spring:
     console:
       enabled: true
       path: /h2-console
+  profiles:
+    active: oauth2
 
 jwt:
   secret-key: "bXlTdXBlclNlY3JldEtleU15U3VwZXJTZWNyZXRLZXlNeVN1cGVyU2VjcmV0S2V5"

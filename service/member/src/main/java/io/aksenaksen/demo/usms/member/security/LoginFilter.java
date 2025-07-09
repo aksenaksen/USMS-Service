@@ -49,17 +49,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         CustomUserDetails userDetails = (CustomUserDetails) authResult.getPrincipal();
 
-        ObjectMapper mapper = new ObjectMapper();
-
         String username = userDetails.getMember().getEmail();
         String role = userDetails.getMember().getRole().getRoleWithPrefix();
-        String userId = userDetails.getMember().getId().toString();
+        String userId = userDetails.getMember().getId();
 
         String token = jwtUtil.createToken(username,userId,role);
 
         response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer "+ token); // 응답에 토큰 포함
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write(mapper.writeValueAsString(token));
+        response.getWriter().write(token);
     }
 
     @Override

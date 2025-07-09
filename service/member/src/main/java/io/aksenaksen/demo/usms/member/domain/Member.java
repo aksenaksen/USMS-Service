@@ -65,6 +65,21 @@ public class Member {
         member.createdAt = LocalDateTime.now();
         return member;
     }
+    public static Member createOfOAuth2(String email, String nickname,String phoneNum,  OAuthProvider provider, String oauthId) {
+        Member member = new Member();
+        member.id = UUID.randomUUID().toString();
+        member.email = requireNonNull(email);
+        member.password = null;
+
+        member.status = MemberStatus.PENDING;
+        member.role = MemberRole.OWNER;
+
+        member.oAuthInfo = new OAuthInfo(provider, oauthId);
+        member.profile = Profile.create(nickname, phoneNum);
+        member.createdAt = LocalDateTime.now();
+        return member;
+
+    }
 
     public void activate() {
         Assert.state(status == MemberStatus.PENDING, "회원의 상태가 대기 상태여야 합니다.");

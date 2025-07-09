@@ -65,7 +65,6 @@ class MemberTest {
 
     @Test
     void changePassword(){
-        member.activate();
         member.changePassword("newSecret", passwordEncoder);
         Assertions.assertThat(passwordEncoder.matches("newSecret", member.getPassword())).isTrue();
     }

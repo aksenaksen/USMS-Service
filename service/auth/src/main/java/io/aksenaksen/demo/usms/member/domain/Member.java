@@ -52,6 +52,9 @@ public class Member {
         this.createdAt = requireNonNull(createdAt);
     }
 
+
+
+
     public static Member createOfEmail(MemberRegisterOfEmailRequest request, PasswordEncoder passwordEncoder) {
         Member member = new Member();
         member.id = UUID.randomUUID().toString();

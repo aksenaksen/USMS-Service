@@ -1,6 +1,6 @@
 package io.aksenaksen.demo.usms.member.adaptor.integration;
 
-import io.aksenaksen.demo.usms.member.application.required.VerificationStatusRepository;
+import io.aksenaksen.demo.usms.member.application.required.VerificationStatusPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -9,9 +9,9 @@ import java.util.concurrent.TimeUnit;
 
 @Repository
 @RequiredArgsConstructor
-public class VerificationStatusRedisRepository implements VerificationStatusRepository {
+public class VerificationStatusRedisRepository implements VerificationStatusPort {
 
-    private final StringRedisTemplate stringRedisTemplate;
+    private final StringRedisTemplate redisTemplate;
     private static final String VERIFY_STATUS_KEY = "verification::%s";
     private static final String VERIFY_STATUS = "true";
 
@@ -19,11 +19,15 @@ public class VerificationStatusRedisRepository implements VerificationStatusRepo
 
     public void create(String principal){
         String key = generateKey(principal);
-        stringRedisTemplate.opsForValue().set(key, VERIFY_STATUS, TTL, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(key, VERIFY_STATUS, TTL, TimeUnit.SECONDS);
     }
 
     public String read(String principal){
-        return stringRedisTemplate.opsForValue().get(generateKey(principal));
+        return redisTemplate.opsForValue().get(generateKey(principal));
+    }
+
+    public void remove(String principal){
+        redisTemplate.delete(generateKey(principal));
     }
 
     private String generateKey(String principal) {

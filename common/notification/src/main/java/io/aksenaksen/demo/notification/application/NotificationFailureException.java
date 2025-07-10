@@ -1,4 +1,4 @@
-package io.aksenaksen.demo.notification;
+package io.aksenaksen.demo.notification.application;
 
 public class NotificationFailureException extends RuntimeException{
 

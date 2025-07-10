@@ -1,8 +1,8 @@
 rootProject.name = 'usms'
 
 
+include 'common:notification'
 include 'service'
 include 'common:snowflake'
-include 'common:notification'
 include 'service:member'
 include 'service:auth'

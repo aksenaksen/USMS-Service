@@ -1,6 +1,6 @@
 package io.aksenaksen.demo.usms.member.security.oauth2;
 
-import io.aksenaksen.demo.usms.member.application.required.MemberRepository;
+import io.aksenaksen.demo.usms.member.application.required.MemberPort;
 import io.aksenaksen.demo.usms.member.domain.Member;
 import io.aksenaksen.demo.usms.member.domain.OAuthProvider;
 import io.aksenaksen.demo.usms.member.security.CustomUserDetails;
@@ -15,9 +15,9 @@ import java.util.Map;
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final MemberRepository memberRepository;
+    private final MemberPort memberRepository;
 
-    public CustomOAuth2UserService(MemberRepository memberRepository) {
+    public CustomOAuth2UserService(MemberPort memberRepository) {
         this.memberRepository = memberRepository;
     }
 

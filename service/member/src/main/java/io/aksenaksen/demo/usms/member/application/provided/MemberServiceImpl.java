@@ -1,5 +1,7 @@
 package io.aksenaksen.demo.usms.member.application.provided;
 
+import io.aksenaksen.demo.usms.member.adaptor.integration.VerificationRedisRepository;
+import io.aksenaksen.demo.usms.member.application.exception.NotVerifiedException;
 import io.aksenaksen.demo.usms.member.domain.Member;
 import io.aksenaksen.demo.usms.member.domain.dto.MemberRegisterOfEmailRequest;
 import io.aksenaksen.demo.usms.member.domain.dto.MemberUpdateProfileRequest;
@@ -13,9 +15,13 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRegister memberRegister;
     private final MemberEditor memberEditor;
     private final MemberFinder memberFinder;
+    private final VerificationService verificationService;
 
     @Override
     public Member register(MemberRegisterOfEmailRequest request) {
+
+        if(!verificationService.isVerified(request.email())) throw new NotVerifiedException("본인인증을 해야합니다.");
+
         return memberRegister.register(request);
     }
 

@@ -1,6 +1,6 @@
 package io.aksenaksen.demo.usms.member.application.provided;
 
-import io.aksenaksen.demo.usms.member.application.required.MemberRepository;
+import io.aksenaksen.demo.usms.member.application.required.MemberPort;
 import io.aksenaksen.demo.usms.member.domain.Member;
 import io.aksenaksen.demo.usms.member.domain.PasswordEncoder;
 import io.aksenaksen.demo.usms.member.domain.dto.MemberRegisterOfEmailRequest;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberRegister {
 
-    private final MemberRepository memberRepository;
+    private final MemberPort memberRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional

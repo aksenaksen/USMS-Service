@@ -22,6 +22,7 @@
 
 ---
 
-아래는 전체 아키텍처를 시각화한 다이어그램입니다.
+## 아키텍처
+
 <img width="2000" height="1003" alt="cctv" src="https://github.com/user-attachments/assets/af96aaa1-5b68-4081-9e73-bb3432ca3111" />
 

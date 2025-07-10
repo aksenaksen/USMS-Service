@@ -20,4 +20,6 @@ class VerificationStatusRedisRepositoryTest {
         Assertions.assertThat(result).isEqualTo("true");
 
     }
+
+
 }

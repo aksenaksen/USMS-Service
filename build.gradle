@@ -23,12 +23,22 @@ subprojects {
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 
-    tasks.getByName("bootJar") {
-        enabled = true
-    }
-
-    tasks.getByName("jar") {
-        enabled = false
+    if (project.path.startsWith(':service:')) {
+        // 서비스 모듈: bootJar 활성화, jar 비활성화
+        tasks.named('bootJar') {
+            enabled = true
+        }
+        tasks.named('jar') {
+            enabled = false
+        }
+    } else {
+        // 공통 모듈: bootJar 비활성화, jar 활성화
+        tasks.named('bootJar') {
+            enabled = false
+        }
+        tasks.named('jar') {
+            enabled = true
+        }
     }
 
     tasks.named('test') {
@@ -38,6 +48,6 @@ subprojects {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(24)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }

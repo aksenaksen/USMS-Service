@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,42 +24,69 @@ import java.io.IOException;
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    public static final String TOKEN_PREFIX = "Bearer ";
+    private static final String TOKEN_PREFIX = "Bearer ";
+    private static final String EXPIRED_TOKEN_MESSAGE = "엑세스 토큰이 만료되었습니다.";
+    private static final String INVALID_TOKEN_MESSAGE = "유효하지 않은 토큰입니다.";
+    private static final String UNKNOWN_TOKEN_TYPE_MESSAGE = "알 수 없는 토큰 타입입니다.";
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if(authHeader == null || !authHeader.startsWith(TOKEN_PREFIX)) {
-            log.error("token is null");
+        if (authHeader == null || !authHeader.startsWith(TOKEN_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
-        String token = authHeader.split(" ")[1];
 
-        if(jwtUtil.isExpired(token)) {
-            log.error("token is expired");
-            filterChain.doFilter(request, response);
-            return;
-        }
+        String token = authHeader.substring(TOKEN_PREFIX.length());
+
+        if (isExpired(response, token) || isNotAccessToken(response, token)) return;
 
         String email = jwtUtil.getEmail(token);
-        MemberRole role = MemberRole.from(jwtUtil.getRole(token));
+        String role = jwtUtil.getRole(token);
         String memberId = jwtUtil.getUserId(token);
 
-        Member user = Member.builder()
+        Member member = Member.builder()
                 .id(memberId)
-                .role(role)
+                .role(MemberRole.from(role))
                 .email(email)
                 .build();
 
-        CustomUserDetails userDetails = new CustomUserDetails(user);
-        Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        CustomUserDetails userDetails = new CustomUserDetails(member);
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-        if(SecurityContextHolder.getContext().getAuthentication() == null){
-            SecurityContextHolder.getContext().setAuthentication(auth);
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
+    }
+
+    private boolean isExpired(HttpServletResponse response, String token) throws IOException {
+        if (jwtUtil.isExpired(token)) {
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.getWriter().print(EXPIRED_TOKEN_MESSAGE);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isNotAccessToken(HttpServletResponse response, String token) throws IOException {
+        try {
+            TokenType type = TokenType.valueOf(jwtUtil.getTokenType(token));
+            if (type != TokenType.ACCESS) {
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                response.getWriter().print(INVALID_TOKEN_MESSAGE);
+                return true;
+            }
+        } catch (IllegalArgumentException | NullPointerException e) {
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.getWriter().print(UNKNOWN_TOKEN_TYPE_MESSAGE);
+            return true;
+        }
+        return false;
     }
 }

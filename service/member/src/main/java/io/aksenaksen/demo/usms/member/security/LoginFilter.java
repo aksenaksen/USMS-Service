@@ -2,6 +2,7 @@ package io.aksenaksen.demo.usms.member.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.util.*;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -53,16 +55,27 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String role = userDetails.getMember().getRole().getRoleWithPrefix();
         String userId = userDetails.getMember().getId();
 
-        String token = jwtUtil.createToken(username,userId,role);
 
-        response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer "+ token); // 응답에 토큰 포함
+        String accessToken = jwtUtil.createToken(TokenType.ACCESS.name(),username,userId,role);
+        String refreshToken = jwtUtil.createToken(TokenType.REFRESH.name(),username,userId,role);
+
+        response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer "+ accessToken);
+        response.addCookie(createCookie(TokenType.REFRESH.name(), refreshToken));
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write(token);
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    private Cookie createCookie(String name, String refreshToken) {
+        Cookie cookie = new Cookie(name, refreshToken);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge((int) TimeUnit.DAYS.toSeconds(1));
+        return cookie;
     }
 }

@@ -21,3 +21,7 @@
 > 과거에 팀 개발에 참여했던 코드이며, 현재는 개인 학습 목적에 맞춰 구조와 구현 방식을 리팩토링하고 있습니다.
 
 ---
+
+아래는 전체 아키텍처를 시각화한 다이어그램입니다.
+<img width="2000" height="1003" alt="cctv" src="https://github.com/user-attachments/assets/af96aaa1-5b68-4081-9e73-bb3432ca3111" />
+

@@ -7,6 +7,7 @@ import io.aksenaksen.demo.usms.auth.filter.JwtRequestFilter;
 import io.aksenaksen.demo.usms.auth.filter.LoginFilter;
 import io.aksenaksen.demo.usms.auth.application.required.CustomOAuth2UserService;
 import io.aksenaksen.demo.usms.auth.application.OAuth2SuccessHandler;
+import io.aksenaksen.demo.usms.auth.filter.LogoutFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +28,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtRequestFilter jwtRequestFilter;
+    private final LogoutFilter logoutFilter;
     private final JwtUtil jwtUtil;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final CustomOAuth2UserService customOAuth2UserService;
@@ -67,6 +69,7 @@ public class SecurityConfig {
 
         http
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(logoutFilter, LogoutFilter.class)
                 .addFilterAfter(new LoginFilter(authenticationManager(),refreshTokenPort,jwtUtil), JwtRequestFilter.class);
 
         return http.build();

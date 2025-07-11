@@ -43,6 +43,11 @@ public class RefreshTokenRedisRepository implements RefreshTokenPort {
         });
     }
 
+    @Override
+    public String read(String key) {
+        return redisTemplate.opsForValue().get(generateKey(key));
+    }
+
     private String generateKey(String username) {
         return REFRESH_KEY_FORMAT.formatted(username);
     }

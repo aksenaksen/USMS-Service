@@ -1,7 +1,9 @@
-package io.aksenaksen.demo.usms.member.adaptor.webapi;
+package io.aksenaksen.demo.usms.auth.adaptor.webapi;
 
-import io.aksenaksen.demo.usms.member.security.JwtUtil;
-import io.aksenaksen.demo.usms.member.security.TokenType;
+import io.aksenaksen.demo.jwt.JwtUtil;
+import io.aksenaksen.demo.usms.auth.application.provieded.RefreshTokenPort;
+import io.aksenaksen.demo.usms.auth.domain.Expiration;
+import io.aksenaksen.demo.usms.auth.domain.TokenType;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class AuthController {
 
     private final JwtUtil jwtUtil;
+    private final RefreshTokenPort refreshTokenPort;
 
     @PostMapping("/v1/auth/refresh")
     public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response) {
@@ -34,13 +37,19 @@ public class AuthController {
         String role = jwtUtil.getRole(refreshToken);
         String userId = jwtUtil.getUserId(refreshToken);
 
-        String accessToken = jwtUtil.createToken(TokenType.ACCESS.name(), username, userId, role);
-        String newRefreshToken = jwtUtil.createToken(TokenType.REFRESH.name(),username,userId,role);
+        String accessToken = jwtUtil.createToken(TokenType.ACCESS.name(), username, userId, role, Expiration.ACCESS.getTtl());
+        String newRefreshToken = jwtUtil.createToken(TokenType.REFRESH.name(),username,userId,role, Expiration.REFRESH.getTtl());
+
+// 토큰 재발급하면서 redis 에 값 삭제 후 업데이트
+        refreshTokenPort.reissueToken(username,newRefreshToken,Expiration.REFRESH.getTtl());
+
         response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
         response.addCookie(createCookie(TokenType.REFRESH.name(), newRefreshToken));
 
         return ResponseEntity.ok().build();
     }
+
+
 
     private String extractRefreshToken(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();

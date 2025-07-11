@@ -1,4 +1,4 @@
-package io.aksenaksen.demo.usms.member.security;
+package io.aksenaksen.demo.usms.auth.domain;
 
 import io.aksenaksen.demo.usms.member.domain.Member;
 import org.springframework.security.core.GrantedAuthority;

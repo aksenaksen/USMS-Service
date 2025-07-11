@@ -1,8 +1,10 @@
-package io.aksenaksen.demo.usms.member.security.oauth2;
+package io.aksenaksen.demo.usms.auth.application;
 
-import io.aksenaksen.demo.usms.member.security.CustomUserDetails;
-import io.aksenaksen.demo.usms.member.security.JwtUtil;
-import io.aksenaksen.demo.usms.member.security.TokenType;
+import io.aksenaksen.demo.jwt.JwtUtil;
+import io.aksenaksen.demo.usms.auth.application.provieded.RefreshTokenPort;
+import io.aksenaksen.demo.usms.auth.domain.CustomUserDetails;
+import io.aksenaksen.demo.usms.auth.domain.Expiration;
+import io.aksenaksen.demo.usms.auth.domain.TokenType;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,8 +25,9 @@ import java.util.concurrent.TimeUnit;
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtUtil jwtUtil;
+    private final RefreshTokenPort refreshTokenPort;
 
-    @Override
+      @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -32,9 +35,10 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         String username = userDetails.getMember().getEmail();
         String role = userDetails.getMember().getRole().getRoleWithPrefix();
         String userId = userDetails.getMember().getId();
-        String accessToken = jwtUtil.createToken(TokenType.ACCESS.name(), username,userId,role);
-        String refreshToken = jwtUtil.createToken(TokenType.REFRESH.name(), username,userId,role);
+        String accessToken = jwtUtil.createToken(TokenType.ACCESS.name(), username,userId,role, Expiration.ACCESS.getTtl());
+        String refreshToken = jwtUtil.createToken(TokenType.REFRESH.name(), username,userId,role, Expiration.REFRESH.getTtl());
 
+        refreshTokenPort.create(username,refreshToken,Expiration.REFRESH.getTtl());
 
         response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer "+ accessToken);
         response.addCookie(createCookie(TokenType.REFRESH.name(), refreshToken));

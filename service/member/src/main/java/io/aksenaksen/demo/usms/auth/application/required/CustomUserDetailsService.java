@@ -1,5 +1,6 @@
-package io.aksenaksen.demo.usms.member.security;
+package io.aksenaksen.demo.usms.auth.application.required;
 
+import io.aksenaksen.demo.usms.auth.domain.CustomUserDetails;
 import io.aksenaksen.demo.usms.member.application.required.MemberPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

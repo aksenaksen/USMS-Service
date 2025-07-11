@@ -1,4 +1,4 @@
-package io.aksenaksen.demo.usms.member.security.oauth2;
+package io.aksenaksen.demo.usms.auth.domain;
 
 public interface OAuth2Info {
     String getProviderId();

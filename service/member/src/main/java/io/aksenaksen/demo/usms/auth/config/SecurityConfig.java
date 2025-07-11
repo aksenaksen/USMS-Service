@@ -1,14 +1,17 @@
-package io.aksenaksen.demo.usms.member.security;
+package io.aksenaksen.demo.usms.auth.config;
 
-import io.aksenaksen.demo.usms.member.domain.PasswordEncoder;
-import io.aksenaksen.demo.usms.member.security.oauth2.CustomOAuth2UserService;
-import io.aksenaksen.demo.usms.member.security.oauth2.OAuth2SuccessHandler;
+import io.aksenaksen.demo.jwt.JwtUtil;
+import io.aksenaksen.demo.usms.auth.application.provieded.RefreshTokenPort;
+import io.aksenaksen.demo.usms.auth.application.required.CustomUserDetailsService;
+import io.aksenaksen.demo.usms.auth.filter.JwtRequestFilter;
+import io.aksenaksen.demo.usms.auth.filter.LoginFilter;
+import io.aksenaksen.demo.usms.auth.application.required.CustomOAuth2UserService;
+import io.aksenaksen.demo.usms.auth.application.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -29,6 +32,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomUserDetailsService customUserDetailsService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final RefreshTokenPort refreshTokenPort;
 
     @Bean
     public AuthenticationManager authenticationManager() throws Exception {
@@ -63,7 +67,7 @@ public class SecurityConfig {
 
         http
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new LoginFilter(authenticationManager(),jwtUtil), JwtRequestFilter.class);
+                .addFilterAfter(new LoginFilter(authenticationManager(),refreshTokenPort,jwtUtil), JwtRequestFilter.class);
 
         return http.build();
     }

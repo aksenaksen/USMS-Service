@@ -1,9 +1,11 @@
-package io.aksenaksen.demo.usms.member.security.oauth2;
+package io.aksenaksen.demo.usms.auth.application.required;
 
+import io.aksenaksen.demo.usms.auth.domain.NaverUserInfo;
+import io.aksenaksen.demo.usms.auth.domain.OAuth2Info;
 import io.aksenaksen.demo.usms.member.application.required.MemberPort;
 import io.aksenaksen.demo.usms.member.domain.Member;
 import io.aksenaksen.demo.usms.member.domain.OAuthProvider;
-import io.aksenaksen.demo.usms.member.security.CustomUserDetails;
+import io.aksenaksen.demo.usms.auth.domain.CustomUserDetails;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;

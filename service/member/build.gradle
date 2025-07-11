@@ -24,4 +24,5 @@ dependencies {
 
     implementation project(":common:notification")
     implementation project(":common:snowflake")
+    implementation project(":common:jwt")
 }

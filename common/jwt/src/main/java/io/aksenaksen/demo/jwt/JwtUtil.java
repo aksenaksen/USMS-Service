@@ -1,4 +1,4 @@
-package io.aksenaksen.demo.usms.member.security;
+package io.aksenaksen.demo.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -19,28 +18,22 @@ public class JwtUtil {
 
     private final Key key;
 
-    private static final long ACCESS_EXPIRATION_TIME = TimeUnit.HOURS.toMillis(1);
-    private static final long REFRESH_EXPIRATION_TIME = TimeUnit.DAYS.toMillis(1);
-
-
     // 리터럴 키 상수
     private static final String CLAIM_TOKEN_TYPE = "tokenType";
     private static final String CLAIM_EMAIL = "email";
     private static final String CLAIM_USER_ID = "userId";
     private static final String CLAIM_ROLE = "role";
 
-    public JwtUtil(@Value("${jwt.secret-key}") String secretKey) {
+    public JwtUtil(@Value("${jwt.secret_key}") String secretKey) {
         this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
     }
 
-    public String createToken(String tokenType, String username, String userId, String role) {
+    public String createToken(String tokenType, String username, String userId, String role,Long ttl) {
         return Jwts.builder()
                 .setClaims(createClaims(tokenType, username, userId, role))
                 .setIssuedAt(new Date())
                 .setExpiration(
-                        new Date(System.currentTimeMillis() +
-                                (tokenType.equals(TokenType.ACCESS.name())
-                                        ? ACCESS_EXPIRATION_TIME : REFRESH_EXPIRATION_TIME)))
+                        new Date(System.currentTimeMillis() + ttl))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }

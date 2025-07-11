@@ -1,6 +1,11 @@
-package io.aksenaksen.demo.usms.member.security;
+package io.aksenaksen.demo.usms.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.aksenaksen.demo.jwt.JwtUtil;
+import io.aksenaksen.demo.usms.auth.application.provieded.RefreshTokenPort;
+import io.aksenaksen.demo.usms.auth.domain.CustomUserDetails;
+import io.aksenaksen.demo.usms.auth.domain.Expiration;
+import io.aksenaksen.demo.usms.auth.domain.TokenType;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +26,9 @@ import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
+
     private final AuthenticationManager authenticationManager;
+    private final RefreshTokenPort refreshTokenPort;
     private final JwtUtil jwtUtil;
 
 
@@ -56,8 +63,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String userId = userDetails.getMember().getId();
 
 
-        String accessToken = jwtUtil.createToken(TokenType.ACCESS.name(),username,userId,role);
-        String refreshToken = jwtUtil.createToken(TokenType.REFRESH.name(),username,userId,role);
+        String accessToken = jwtUtil.createToken(TokenType.ACCESS.name(),username,userId,role, Expiration.ACCESS.getTtl());
+        String refreshToken = jwtUtil.createToken(TokenType.REFRESH.name(),username,userId,role,Expiration.REFRESH.getTtl());
+
+        refreshTokenPort.create(username,refreshToken,Expiration.REFRESH.getTtl());
 
         response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer "+ accessToken);
         response.addCookie(createCookie(TokenType.REFRESH.name(), refreshToken));

@@ -1,10 +1,10 @@
 package io.aksenaksen.demo.usms.store.domain.exception;
 
-import com.ssg.usms.business.error.ErrorResponseDto;
 import lombok.Getter;
 
-import static com.ssg.usms.business.constant.CustomStatusCode.EMPTY_IMG_FILE_CODE;
-import static com.ssg.usms.business.constant.CustomStatusCode.EMPTY_IMG_FILE_MESSAGE;
+import static io.aksenaksen.demo.usms.constant.CustomStatusCode.EMPTY_IMG_FILE_CODE;
+import static io.aksenaksen.demo.usms.constant.CustomStatusCode.EMPTY_IMG_FILE_MESSAGE;
+
 
 @Getter
 public class EmptyImgFileException extends RuntimeException {

@@ -1,10 +1,11 @@
 package io.aksenaksen.demo.usms.store.domain.exception;
 
-import com.ssg.usms.business.error.ErrorResponseDto;
+import io.aksenaksen.demo.usms.constant.ErrorResponseDto;
 import lombok.Getter;
 
-import static com.ssg.usms.business.constant.CustomStatusCode.NOT_EXISTING_STORE_CODE;
-import static com.ssg.usms.business.constant.CustomStatusCode.NOT_EXISTING_STORE_MESSAGE;
+import static io.aksenaksen.demo.usms.constant.CustomStatusCode.NOT_EXISTING_STORE_CODE;
+import static io.aksenaksen.demo.usms.constant.CustomStatusCode.NOT_EXISTING_STORE_MESSAGE;
+
 
 @Getter
 public class NotExistingStoreException extends RuntimeException {

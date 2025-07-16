@@ -1,10 +1,11 @@
 package io.aksenaksen.demo.usms.store.domain.exception;
 
-import com.ssg.usms.business.error.ErrorResponseDto;
+import io.aksenaksen.demo.usms.constant.ErrorResponseDto;
 import lombok.Getter;
 
-import static com.ssg.usms.business.constant.CustomStatusCode.NOT_ALLOWED_IMG_FILE_FORMAT_CODE;
-import static com.ssg.usms.business.constant.CustomStatusCode.NOT_ALLOWED_IMG_FILE_FORMAT_MESSAGE;
+import static io.aksenaksen.demo.usms.constant.CustomStatusCode.NOT_ALLOWED_IMG_FILE_FORMAT_CODE;
+import static io.aksenaksen.demo.usms.constant.CustomStatusCode.NOT_ALLOWED_IMG_FILE_FORMAT_MESSAGE;
+
 
 @Getter
 public class NotAllowedImgFileFormatException extends RuntimeException {

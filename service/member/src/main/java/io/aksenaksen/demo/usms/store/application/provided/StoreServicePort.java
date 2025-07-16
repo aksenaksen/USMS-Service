@@ -34,4 +34,6 @@ public interface StoreServicePort {
     void validateOwnedStore(Long storeId, String userId);
 
     void validateOwnedBusinessLicenseImgKey(Long storeId, String businessLicenseImgFileKey);
+
+    String getRegion(Long storeId);
 }

@@ -1,10 +1,12 @@
 package io.aksenaksen.demo.usms.store.annotation;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+
 import java.util.regex.Pattern;
 
-import static com.ssg.usms.business.store.constant.StoreConstants.BUSINESS_LICENSE_IMG_KEY_REGEX;
+import static io.aksenaksen.demo.usms.store.constant.StoreConstants.BUSINESS_LICENSE_IMG_KEY_REGEX;
+
 
 public class BusinessLicenseImgKeyValidator implements ConstraintValidator<BusinessLicenseImgKey, String> {
 

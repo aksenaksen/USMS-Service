@@ -109,5 +109,11 @@ public class StoreService implements StoreServicePort{
         storeQueryService.validateOwnedBusinessLicenseImgKey(storeId, businessLicenseImgFileKey);
     }
 
+    @Transactional(readOnly = true)
+    public String getRegion(Long storeId){
+
+        return storeQueryService.findById(storeId).makeRegion();
+    }
+
 
 }

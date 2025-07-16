@@ -36,6 +36,10 @@ public class Store {
         return store;
     }
 
+    public String makeRegion(){
+        String[] address = this.storeAddress.split(" ");
+        return address[0] + " " + address[1];
+    }
 
     public void approve(String approvalMessage) {
         this.storeState = StoreState.APPROVAL;

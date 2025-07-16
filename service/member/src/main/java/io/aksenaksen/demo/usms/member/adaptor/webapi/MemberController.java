@@ -1,6 +1,6 @@
 package io.aksenaksen.demo.usms.member.adaptor.webapi;
 
-import io.aksenaksen.demo.usms.member.application.provided.MemberService;
+import io.aksenaksen.demo.usms.member.application.provided.MemberServicePort;
 import io.aksenaksen.demo.usms.member.domain.Member;
 import io.aksenaksen.demo.usms.member.domain.dto.MemberRegisterOfEmailRequest;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberService memberService;
+    private final MemberServicePort memberService;
 
     @PostMapping("/v1/members")
     public ResponseEntity<Void> registerMember(

@@ -1,7 +1,7 @@
 package io.aksenaksen.demo.usms.auth.filter;
 
 import io.aksenaksen.demo.jwt.JwtUtil;
-import io.aksenaksen.demo.usms.auth.domain.CustomUserDetails;
+import io.aksenaksen.demo.usms.auth.domain.UsmsUserDetails;
 import io.aksenaksen.demo.usms.auth.domain.TokenType;
 import io.aksenaksen.demo.usms.member.domain.Member;
 import io.aksenaksen.demo.usms.member.domain.MemberRole;
@@ -57,7 +57,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 .email(email)
                 .build();
 
-        CustomUserDetails userDetails = new CustomUserDetails(member);
+        UsmsUserDetails userDetails = new UsmsUserDetails(member);
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 

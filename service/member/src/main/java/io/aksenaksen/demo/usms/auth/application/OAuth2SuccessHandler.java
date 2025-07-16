@@ -2,7 +2,7 @@ package io.aksenaksen.demo.usms.auth.application;
 
 import io.aksenaksen.demo.jwt.JwtUtil;
 import io.aksenaksen.demo.usms.auth.application.provieded.RefreshTokenPort;
-import io.aksenaksen.demo.usms.auth.domain.CustomUserDetails;
+import io.aksenaksen.demo.usms.auth.domain.UsmsUserDetails;
 import io.aksenaksen.demo.usms.auth.domain.Expiration;
 import io.aksenaksen.demo.usms.auth.domain.TokenType;
 import jakarta.servlet.ServletException;
@@ -30,7 +30,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
       @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        UsmsUserDetails userDetails = (UsmsUserDetails) authentication.getPrincipal();
 
         String username = userDetails.getMember().getEmail();
         String role = userDetails.getMember().getRole().getRoleWithPrefix();

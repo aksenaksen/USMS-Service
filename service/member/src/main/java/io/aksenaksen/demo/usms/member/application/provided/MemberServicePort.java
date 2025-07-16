@@ -4,7 +4,7 @@ import io.aksenaksen.demo.usms.member.domain.Member;
 import io.aksenaksen.demo.usms.member.domain.dto.MemberRegisterOfEmailRequest;
 import io.aksenaksen.demo.usms.member.domain.dto.MemberUpdateProfileRequest;
 
-public interface MemberService {
+public interface MemberServicePort {
 
     Member register(MemberRegisterOfEmailRequest request);
 

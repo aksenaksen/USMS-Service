@@ -6,7 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "io.aksenaksen.demo.usms.member",
         "io.aksenaksen.demo.notification",
         "io.aksenaksen.demo.jwt",
-        "io.aksenaksen.demo.usms.auth"
+        "io.aksenaksen.demo.usms.auth",
+        "io.aksenaksen.demo.usms.config"
 })
 public class MemberApplication {
 

@@ -1,6 +1,6 @@
 package io.aksenaksen.demo.usms.auth.application.required;
 
-import io.aksenaksen.demo.usms.auth.domain.CustomUserDetails;
+import io.aksenaksen.demo.usms.auth.domain.UsmsUserDetails;
 import io.aksenaksen.demo.usms.member.application.required.MemberPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +17,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return memberRepository.findByEmail(email)
-                .map(CustomUserDetails::new)
+                .map(UsmsUserDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException(email));
     }
 }

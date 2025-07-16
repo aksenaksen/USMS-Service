@@ -3,7 +3,7 @@ package io.aksenaksen.demo.usms.auth.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.aksenaksen.demo.jwt.JwtUtil;
 import io.aksenaksen.demo.usms.auth.application.provieded.RefreshTokenPort;
-import io.aksenaksen.demo.usms.auth.domain.CustomUserDetails;
+import io.aksenaksen.demo.usms.auth.domain.UsmsUserDetails;
 import io.aksenaksen.demo.usms.auth.domain.Expiration;
 import io.aksenaksen.demo.usms.auth.domain.TokenType;
 import jakarta.servlet.FilterChain;
@@ -56,7 +56,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult
     ) throws IOException {
 
-        CustomUserDetails userDetails = (CustomUserDetails) authResult.getPrincipal();
+        UsmsUserDetails userDetails = (UsmsUserDetails) authResult.getPrincipal();
 
         String username = userDetails.getMember().getEmail();
         String role = userDetails.getMember().getRole().getRoleWithPrefix();

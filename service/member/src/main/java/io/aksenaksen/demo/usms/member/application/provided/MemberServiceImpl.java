@@ -1,6 +1,5 @@
 package io.aksenaksen.demo.usms.member.application.provided;
 
-import io.aksenaksen.demo.usms.member.adaptor.integration.VerificationRedisRepository;
 import io.aksenaksen.demo.usms.member.application.exception.NotVerifiedException;
 import io.aksenaksen.demo.usms.member.domain.Member;
 import io.aksenaksen.demo.usms.member.domain.dto.MemberRegisterOfEmailRequest;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService {
+public class MemberServiceImpl implements MemberServicePort {
 
     private final MemberRegister memberRegister;
     private final MemberEditor memberEditor;
